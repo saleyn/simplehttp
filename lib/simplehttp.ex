@@ -34,8 +34,8 @@ defmodule SimpleHttp do
   def request(method, url, args \\ []) do
     request = %Request{args: args} = create_request(method, url, args)
     {profile, args} = init_httpc(args)
-    {debug, args1} = Keyword.pop(args, :debug, nil)
-    args1 != [] && raise ArgumentError, message: "Invalid arguments: #{inspect(args1)}"
+    args1   = :lists.filter(fn(kv) -> elem(kv, 0) != :debug end, args)
+    args1  != [] && raise ArgumentError, message: "Invalid arguments: #{inspect(args1)}"
     execute(%{request | args: args, profile: profile})
   end
 
@@ -114,15 +114,14 @@ defmodule SimpleHttp do
   end
 
   defp add_headers_to_request(%Request{args: args} = request) do
-    content_type_key = "Content-Type"
     {headers, args} = Keyword.pop(args, :headers, %{})
-    {content_type, headers} = pop_in(headers[content_type_key])
+    {content_type, headers} = SimpleHttp.List.pop(headers, "Content-Type")
 
     headers =
       if headers do
-        Enum.map(headers, fn {x, y} -> {to_charlist(x), y} end)
+        Enum.map(headers, fn {x, y} -> {to_charlist(x), y} end) |> to_list()
       else
-        %{}
+        []
       end
 
     request =
@@ -281,4 +280,7 @@ defmodule SimpleHttp do
     Keyword.get(args, :debug) && IO.puts("Request: #{inspect(request, pretty: true)}")
     request
   end
+
+  defp to_list(m) when is_map(m), do: :maps.to_list(m)
+  defp to_list(m) when is_list(m), do: m
 end

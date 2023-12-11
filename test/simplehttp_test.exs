@@ -1,6 +1,7 @@
 defmodule SimpleHttpTest do
   use ExUnit.Case
   doctest SimpleHttp
+  doctest SimpleHttp.List
 
   defmodule Test.Server do
     use Plug.Router
@@ -15,7 +16,7 @@ defmodule SimpleHttpTest do
     end
 
     def start_link do
-      {:ok, _} = Plug.Adapters.Cowboy.http(__MODULE__, [])
+      {:ok, _} = Plug.Cowboy.http(__MODULE__, [])
     end
 
     get "/" do

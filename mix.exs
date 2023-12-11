@@ -24,7 +24,13 @@ defmodule SimpleHttp.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [ssl: :optional, inets: :optional]]
+    [
+      extra_applications: [
+        ssl: :optional,
+        inets: :optional,
+        runtime_tools: :optional
+      ]
+    ]
   end
 
   defp deps do
