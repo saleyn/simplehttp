@@ -50,7 +50,7 @@ defmodule SimpleHttp do
   def close(%Response{profile: profile}), do: close(profile)
 
   @spec execute(SimpleHttp.Request.t()) :: {:error, any()} | {:ok, SimpleHttp.Response.t()}
-  defp execute(%Request{} = req) do
+  defp execute(%Request{args: args} = req) do
     params =
       (req.body && {req.url, req.headers, req.content_type, req.body}) || {req.url, req.headers}
 
@@ -62,6 +62,8 @@ defmodule SimpleHttp do
         profile ->
           :httpc.request(req.method, params, req.http_options, req.options, profile)
       end
+
+    Keyword.get(args, :debug) && IO.puts("Response: #{inspect(httpc_response, pretty: true)}")
 
     case httpc_response do
       {:ok, {{_, status, _}, headers, body}} ->
