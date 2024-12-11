@@ -66,9 +66,10 @@ defmodule SimpleHttp do
     Keyword.get(args, :debug) && IO.puts("Response: #{inspect(httpc_response, pretty: true)}")
 
     case httpc_response do
-      {:ok, {{_, status, _}, headers, body}} ->
+      {:ok, {{_, status, statusline}, headers, body}} ->
         response = %Response{
           status: status,
+          statusline: statusline,
           headers: format_headers(headers, req.headers_format),
           body: cast_body(body),
           profile: req.profile

@@ -5,6 +5,7 @@ defmodule SimpleHttp.Response do
   @type t :: %__MODULE__{}
 
   defstruct status: nil,
+            statusline: nil,
             headers: [],
             body: nil,
             profile: nil
