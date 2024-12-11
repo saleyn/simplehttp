@@ -55,12 +55,12 @@ defmodule SimpleHttp.Mixfile do
       name: :simplehttp,
       description: "HTTP client for Elixir without dependencies",
       files: ["lib", "config", "mix.exs", "README*"],
-      maintainers: ["Bagu Alexandru Bogdan"],
+      maintainers: ["Bagu Alexandru Bogdan", "Serge Aleynikov"],
       licenses: ["Apache 2.0"],
       links: %{
-        "GitHub" => "https://github.com/alexandrubagu/simplehttp",
-        "Docs" => "https://github.com/alexandrubagu/simplehttp",
-        "Website" => "http://www.alexandrubagu.info"
+        "GitHub" => "https://github.com/saleyn/simplehttp",
+        #"Docs" => "https://github.com/saleyn/simplehttp",
+        #"Website" => "http://www.alexandrubagu.info"
       }
     ]
   end
