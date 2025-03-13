@@ -12,7 +12,17 @@ defmodule SimpleHttp do
     end
   end
 
-  # Create methods for get/post/delete/etc
+  @doc """
+    Create virtual methods such as:
+      SimpleHttp.get(...)
+      SimpleHttp.post(...)
+      SimpleHttp.delete(...)
+      SimpleHttp.put(...)
+      SimpleHttp.options(...)
+      SimpleHttp.head(...)
+      SimpleHttp.patch(...)
+      SimpleHttp.trace(...)
+  """
   @methods ["get", "post", "delete", "put", "options", "head", "patch", "trace"]
   Enum.each(@methods, fn method ->
     def unquote(:"#{method}")(url, args \\ []) do
@@ -37,8 +47,8 @@ defmodule SimpleHttp do
   def request(method, url, args \\ []) do
     request = %Request{args: args} = create_request(method, url, args)
     {profile, args} = init_httpc(args)
-    args1 = :lists.filter(fn kv -> elem(kv, 0) != :debug end, args)
-    args1 != [] && raise ArgumentError, message: "Invalid arguments: #{inspect(args1)}"
+    args1   = :lists.filter(fn(kv) -> elem(kv, 0) != :debug end, args)
+    args1  != [] && raise ArgumentError, message: "Invalid arguments: #{inspect(args1)}"
     execute(%{request | args: args, profile: profile})
   end
 
