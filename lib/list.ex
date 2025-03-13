@@ -27,7 +27,7 @@ defmodule SimpleHttp.List do
       [{"a", 1}, {:b, 2}, {:c, 3}]
   """
   def merge(list1, list2) do
-    list1 = :lists.filter(fn({k, _}) -> not :lists.keymember(k, 1, list2) end, list1)
+    list1 = :lists.filter(fn {k, _} -> not :lists.keymember(k, 1, list2) end, list1)
     list1 ++ list2
   end
 

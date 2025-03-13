@@ -12,17 +12,7 @@ defmodule SimpleHttp do
     end
   end
 
-  @doc """
-    Create virtual methods such as:
-      SimpleHttp.get(...)
-      SimpleHttp.post(...)
-      SimpleHttp.delete(...)
-      SimpleHttp.put(...)
-      SimpleHttp.options(...)
-      SimpleHttp.head(...)
-      SimpleHttp.patch(...)
-      SimpleHttp.trace(...)
-  """
+  # Create methods for get/post/delete/etc
   @methods ["get", "post", "delete", "put", "options", "head", "patch", "trace"]
   Enum.each(@methods, fn method ->
     def unquote(:"#{method}")(url, args \\ []) do
@@ -31,11 +21,24 @@ defmodule SimpleHttp do
   end)
 
   @spec request(atom(), String.t(), keyword()) :: {:error, any()} | {:ok, SimpleHttp.Response.t()}
+  @doc """
+  Returns the result of an HTTP request based on the specified method, URL, and arguments.
+
+  ## Parameters
+
+  - method - the HTTP method to be used (e.g., GET, POST).
+  - url - the endpoint URL to which the request is being made.
+  - args - optional list of additional arguments to configure the request.
+
+  ## Description
+  Handles the process of creating and executing an HTTP request, ensuring that invalid arguments are filtered out.
+
+  """
   def request(method, url, args \\ []) do
     request = %Request{args: args} = create_request(method, url, args)
     {profile, args} = init_httpc(args)
-    args1   = :lists.filter(fn(kv) -> elem(kv, 0) != :debug end, args)
-    args1  != [] && raise ArgumentError, message: "Invalid arguments: #{inspect(args1)}"
+    args1 = :lists.filter(fn kv -> elem(kv, 0) != :debug end, args)
+    args1 != [] && raise ArgumentError, message: "Invalid arguments: #{inspect(args1)}"
     execute(%{request | args: args, profile: profile})
   end
 
